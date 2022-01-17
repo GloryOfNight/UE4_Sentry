@@ -16,7 +16,7 @@ public:
 	/** IModuleInterface implementation end */
 	
 	/** @return pointer to SentryManager or nullptr if module not created correctly */
-	static USentryManager* GetManager();
+	SENTRY_API static USentryManager* GetManager();
 
 private:
 	USentryManager* Manager = nullptr;
