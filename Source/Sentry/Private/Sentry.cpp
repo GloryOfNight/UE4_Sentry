@@ -14,8 +14,7 @@ void FSentryModule::StartupModule()
 
 void FSentryModule::ShutdownModule()
 {
-	Manager->FinishDestroy();
-	Manager = nullptr;
+	// Manager var will be deleted by unreal cleaning of unreachable objects on exit
 }
 
 USentryManager* FSentryModule::GetManager()
