@@ -1,0 +1,61 @@
+Language: Cpp
+BasedOnStyle: LLVM
+AlignAfterOpenBracket: DontAlign   
+AlignTrailingComments: true
+AlignEscapedNewlines: Right
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: InlineOnly
+AllowShortLambdasOnASingleLine: Empty
+AccessModifierOffset: -4
+KeepEmptyLinesAtTheStartOfBlocks: false
+IndentWidth:     4
+IndentWrappedFunctionNames: false
+IndentCaseLabels: false
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '.*\.generated\.h'
+    Priority:        100
+  - Regex:           '".*(/).*"'
+    Priority:        98
+  - Regex:           '".*"'
+    Priority:        99
+  - Regex:           '<.*>'
+    Priority:        97
+NamespaceIndentation: All
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Allman
+BraceWrapping:
+    AfterCaseLabel: true
+    AfterClass: true
+    AfterEnum: true
+    AfterFunction: true
+    AfterNamespace: true
+    AfterObjCDeclaration: true 
+    AfterStruct: true
+    AfterUnion: true
+    AfterExternBlock: true 
+    AfterControlStatement: Always
+    BeforeCatch: true
+    BeforeLambdaBody: true
+    BeforeWhile: true
+    IndentBraces: false
+    SplitEmptyFunction: false
+    SplitEmptyRecord: false
+    SplitEmptyNamespace: false 
+BreakConstructorInitializersBeforeComma: true
+BreakConstructorInitializers: BeforeComma
+BreakStringLiterals: false
+DerivePointerAlignment: false
+DisableFormat:   false
+MaxEmptyLinesToKeep: 1
+PointerAlignment: Left
+ReflowComments:  false
+SortIncludes:    true
+SortUsingDeclarations: true
+SpacesInAngles: false
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeParens: Never
+Standard:        c++14
+TabWidth:        4
+UseTab:          Always
+ColumnLimit:     0

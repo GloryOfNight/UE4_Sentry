@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Sentry",
+	"Description": "Unreal Engine 4 integration of Sentry monitoring",
+	"Category": "Analytics",
+	"CreatedBy": "Siarhei Dziki (aka GloryOfNight)",
+	"CreatedByURL": "https://github.com/GloryOfNight",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "Sentry",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
