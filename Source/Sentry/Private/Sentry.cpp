@@ -22,7 +22,7 @@ USentryManager* FSentryModule::GetManager()
 	static FSentryModule* Module = nullptr;
 	if(!Module)
 	{
-		Module = FModuleManager::GetModulePtr<FSentryModule>("FSentryModule");
+		Module = FModuleManager::GetModulePtr<FSentryModule>(TEXT("Sentry"));
 	}
 	return Module ? Module->Manager : nullptr;
 }
