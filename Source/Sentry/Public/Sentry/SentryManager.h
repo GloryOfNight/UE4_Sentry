@@ -31,11 +31,12 @@ public:
 
 	void SendLogEntry(ESentryLevel Level, const FSentryLogEntry& Value);
 
+	void SendEventJson(const FSentryEvent_Json& Value);
 	void SendEventJson(FSentryEvent_Json&& Value);
 
 	void SendJson(FString&& Json);
 
-	bool LoadDNS(const FString& DNS);
+	bool LoadDNS(const FString& DNS, bool Reset);
 
 protected:
 	void OnProcessRequestComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);

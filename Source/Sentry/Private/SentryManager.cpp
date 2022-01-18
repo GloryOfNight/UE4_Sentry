@@ -14,18 +14,10 @@ USentryManager::USentryManager()
 {
 	if(!HasAllFlags(EObjectFlags::RF_ClassDefaultObject))
 	{
-		FString DNS;
-		GConfig->GetString(TEXT("Sentry"), TEXT("DNS"), DNS, GEngineIni);
+		const FString& DNS = USentrySettings::Get()->DNS;
 		if(!DNS.IsEmpty())
 		{
-			if(LoadDNS(DNS))
-			{
-				UE_LOG(LogSentryManager, Display, TEXT("DNS load - ok"));
-			}
-			else
-			{
-				UE_LOG(LogSentryManager, Error, TEXT("DNS load - failed"));
-			}
+			LoadDNS(DNS, false);
 		}
 		else
 		{
@@ -67,6 +59,11 @@ void USentryManager::SendLogEntry(ESentryLevel Level, const FSentryLogEntry& Val
 	SendEventJson(std::move(Event));
 }
 
+void USentryManager::SendEventJson(const FSentryEvent_Json& Value)
+{
+	SendJson(Value.ToJson());
+}
+
 void USentryManager::SendEventJson(FSentryEvent_Json&& Value)
 {
 	SendJson(Value.ToJson());
@@ -74,6 +71,11 @@ void USentryManager::SendEventJson(FSentryEvent_Json&& Value)
 
 void USentryManager::SendJson(FString&& Json)
 {
+	if(!Url.IsEmpty() && !Key.IsEmpty())
+	{
+		UE_LOG(LogSentryManager, Error, TEXT("Cannot send, DNS not properly configured."))
+		return;
+	}
 	FHttpModule* HttpModule = &FHttpModule::Get();
 	FHttpRequestRef Request = HttpModule->CreateRequest();
 	Request->SetURL(Url);
@@ -89,24 +91,38 @@ void USentryManager::SendJson(FString&& Json)
 	Request->ProcessRequest();
 }
 
-bool USentryManager::LoadDNS(const FString& DNS)
+bool USentryManager::LoadDNS(const FString& DNS, bool Reset)
 {
+	if(Reset)
+	{
+		Url = FString();
+		Key = FString();
+	}
+
 	// 012345678.............................40....may vary.........
 	// https://00112233445566778899aabbccddff00@sentry.companyname/0
-	constexpr uint8 KeyBegin = 8;
 	constexpr uint8 KeyLen = 32;
+	constexpr uint8 KeyBegin = 8;
 	constexpr uint8 KeyEnd = KeyBegin + KeyLen;
 
-	int32 LastSlashIndex = INDEX_NONE;
-	const bool IsValidDNS = DNS.Len() > 32 && DNS.FindLastChar('/', LastSlashIndex) && LastSlashIndex > KeyEnd;
+	int32 SlashIndex = INDEX_NONE;
+	int32 AtIndex = INDEX_NONE;
+	const bool IsValidDNS = DNS.Len() > 32 && DNS.FindLastChar('/', SlashIndex) && SlashIndex > KeyEnd &&
+							DNS.FindLastChar('@', AtIndex) && AtIndex - KeyLen >= KeyBegin;
 
 	if(IsValidDNS)
 	{
 		Key.Append(&DNS[KeyBegin], KeyLen);
 
-		const FString Domain = FString(LastSlashIndex - (KeyEnd + 1), &DNS[KeyEnd + 1]);
-		const FString Project = FString(&DNS[LastSlashIndex], DNS.Len() - LastSlashIndex);
+		const FString Domain = FString(SlashIndex - (KeyEnd + 1), &DNS[KeyEnd + 1]);
+		const FString Project = FString(&DNS[SlashIndex], DNS.Len() - SlashIndex);
 		Url = TEXT("https://") + Domain + TEXT("/api") + Project + TEXT("/store/");
+
+		UE_LOG(LogSentryManager, Display, TEXT("DNS load - ok"));
+	}
+	else
+	{
+		UE_LOG(LogSentryManager, Error, TEXT("DNS load - failed"));
 	}
 
 	return IsValidDNS;

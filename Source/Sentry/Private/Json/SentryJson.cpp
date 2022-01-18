@@ -33,10 +33,11 @@ FSentryEvent_LogEntry_Json::FSentryEvent_LogEntry_Json(FSentryLogEntry&& Value)
 FSentryEvent_Json::FSentryEvent_Json()
 	: event_id{FGuid::NewGuid().ToString(EGuidFormats::Digits).ToLower()}
 	, timestamp{FDateTime::UtcNow().ToUnixTimestamp()}
+	, platform(TEXT("other"))
 {
 }
 
-FString FSentryEvent_Json::ToJson()
+FString FSentryEvent_Json::ToJson() const
 {
 	auto Json = FJsonObjectConverter::UStructToJsonObject<FSentryEvent_Json>(*this);
 
@@ -107,7 +108,6 @@ FSentryEvent_Json& FSentryEvent_Json::SetApplicationInfo(const FSentryApplicatio
 {
 	dist = Value.Distribution;
 	environment = Value.Environment;
-	platform = Value.Platform;
 	release = Value.Release;
 	server_name = Value.ServerName;
 	return *this;

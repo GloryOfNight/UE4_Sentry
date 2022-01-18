@@ -24,5 +24,15 @@ public class Sentry : ModuleRules
                 "JsonUtilities"
             }
             );
+
+        if (Target.Type == TargetType.Editor)
+        {
+            PrivateDependencyModuleNames.AddRange(
+                new string[]
+                {
+                    "Settings"
+                }
+            );
+        }
     }
 }

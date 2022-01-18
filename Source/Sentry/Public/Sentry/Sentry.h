@@ -6,6 +6,7 @@
 #include <Modules/ModuleManager.h>
 
 #include "SentryManager.h"
+#include "SentrySettings.h"
 
 class FSentryModule : public IModuleInterface
 {

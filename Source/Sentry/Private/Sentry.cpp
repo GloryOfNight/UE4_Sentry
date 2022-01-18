@@ -10,6 +10,19 @@ void FSentryModule::StartupModule()
 	{
 		Manager = NewObject<USentryManager>();
 	}
+
+#if WITH_EDITOR
+#include <ISettingsModule.h>
+	ISettingsModule* SettingsModule = FModuleManager::GetModulePtr<ISettingsModule>("Settings");
+
+	if(SettingsModule != nullptr)
+	{
+		SettingsModule->RegisterSettings("Project", "Plugins", "Sentry",
+			LOCTEXT("SentrySettingsName", "Sentry"),
+			LOCTEXT("SentrySettingsDescription", "Configure Sentry plugin"),
+			GetMutableDefault<USentrySettings>());
+	}
+#endif
 }
 
 void FSentryModule::ShutdownModule()

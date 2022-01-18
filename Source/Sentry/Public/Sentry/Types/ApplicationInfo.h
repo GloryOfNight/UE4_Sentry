@@ -15,9 +15,6 @@ struct SENTRY_API FSentryApplicationInfo
 	FString Environment{};
 
 	UPROPERTY()
-	FString Platform{};
-
-	UPROPERTY()
 	FString Release{};
 
 	UPROPERTY()
@@ -28,9 +25,6 @@ struct SENTRY_API FSentryApplicationInfo
 
 	FSentryApplicationInfo& SetEnvironment(const FString& Value);
 	FSentryApplicationInfo& SetEnvironment(FString&& Value);
-
-	FSentryApplicationInfo& SetPlatform(const FString& Value);
-	FSentryApplicationInfo& SetPlatform(FString&& Value);
 
 	FSentryApplicationInfo& SetRelease(const FString& Value);
 	FSentryApplicationInfo& SetRelease(FString&& Value);

@@ -24,18 +24,6 @@ FSentryApplicationInfo& FSentryApplicationInfo::SetEnvironment(FString&& Value)
 	return *this;
 }
 
-FSentryApplicationInfo& FSentryApplicationInfo::SetPlatform(const FString& Value)
-{
-	Platform = Value;
-	return *this;
-}
-
-FSentryApplicationInfo& FSentryApplicationInfo::SetPlatform(FString&& Value)
-{
-	Platform = std::move(Value);
-	return *this;
-}
-
 FSentryApplicationInfo& FSentryApplicationInfo::SetRelease(const FString& Value)
 {
 	Release = Value;

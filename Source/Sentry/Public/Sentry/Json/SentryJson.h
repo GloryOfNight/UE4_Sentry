@@ -6,6 +6,7 @@
 
 #include "SentryJson.generated.h"
 
+/** https://develop.sentry.dev/sdk/event-payloads/types/#exception */
 USTRUCT()
 struct FSentryEvent_Exception_Json
 {
@@ -29,6 +30,7 @@ struct FSentryEvent_Exception_Json
 	FString value;
 };
 
+/** https://develop.sentry.dev/sdk/event-payloads/types/#logentry */
 USTRUCT()
 struct FSentryEvent_LogEntry_Json
 {
@@ -46,6 +48,7 @@ struct FSentryEvent_LogEntry_Json
 	TArray<FString> params;
 };
 
+/** https://develop.sentry.dev/sdk/event-payloads/ */
 USTRUCT()
 struct FSentryEvent_Json
 {
@@ -66,7 +69,7 @@ struct FSentryEvent_Json
 	TArray<FSentryEvent_Exception_Json> exception;
 
 	UPROPERTY()
-	FString fingerprint;
+	TArray<FString> fingerprint;
 
 	UPROPERTY()
 	FString level;
@@ -78,9 +81,6 @@ struct FSentryEvent_Json
 	FString platform;
 
 	UPROPERTY()
-	FString received;
-
-	UPROPERTY()
 	FString release;
 
 	UPROPERTY()
@@ -90,7 +90,7 @@ struct FSentryEvent_Json
 	int64 timestamp;
 
 public:
-	FString ToJson();
+	FString ToJson() const;
 
 public:
 	FSentryEvent_Json& SetException(const TArray<FSentryException>& Values);
