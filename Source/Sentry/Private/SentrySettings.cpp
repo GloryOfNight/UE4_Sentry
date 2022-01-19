@@ -1,4 +1,5 @@
 #include "Sentry/SentrySettings.h"
+
 #include "Sentry/SentryManager.h"
 
 USentrySettings* USentrySettings::Get()
@@ -9,12 +10,12 @@ USentrySettings* USentrySettings::Get()
 #if WITH_EDITOR
 void USentrySettings::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
-	if(PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(USentrySettings, DNS))
+	if(PropertyChangedEvent.GetPropertyName() == GET_MEMBER_NAME_CHECKED(USentrySettings, DSN))
 	{
-		if(auto* Manager = USentryManager::Get())
+		if(auto* Manager = FSentryManager::Get())
 		{
-			Manager->LoadDNS(DNS, true);
+			Manager->LoadDSN(DSN, true);
 		}
-	}
+	}	
 }
 #endif

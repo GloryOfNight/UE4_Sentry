@@ -9,34 +9,32 @@ DEFINE_LOG_CATEGORY(LogSentryManager);
 
 static FSentryApplicationInfo AppInfo;
 
-USentryManager::USentryManager()
-	: UObject()
+FSentryManager::FSentryManager()
+	: Url{}
+	, Key{}
 {
-	if(!HasAllFlags(EObjectFlags::RF_ClassDefaultObject))
+	const FString& DNS = USentrySettings::Get()->DSN;
+	if(!DNS.IsEmpty())
 	{
-		const FString& DNS = USentrySettings::Get()->DNS;
-		if(!DNS.IsEmpty())
-		{
-			LoadDNS(DNS, false);
-		}
-		else
-		{
-			UE_LOG(LogSentryManager, Display, TEXT("No DNS provided, service will not work"));
-		}
+		LoadDSN(DNS, false);
+	}
+	else
+	{
+		UE_LOG(LogSentryManager, Display, TEXT("No DNS provided, service will not work"));
 	}
 }
 
-USentryManager* USentryManager::Get()
+FSentryManager* FSentryManager::Get()
 {
 	return FSentryModule::GetManager();
 }
 
-FSentryApplicationInfo& USentryManager::ApplicationInfo()
+FSentryApplicationInfo& FSentryManager::ApplicationInfo()
 {
 	return AppInfo;
 }
 
-void USentryManager::SendException(ESentryLevel Level, const FSentryException& Value)
+void FSentryManager::SendException(ESentryLevel Level, const FSentryException& Value)
 {
 	FSentryEvent_Json Event = FSentryEvent_Json()
 								  .SetApplicationInfo(AppInfo)
@@ -45,12 +43,12 @@ void USentryManager::SendException(ESentryLevel Level, const FSentryException& V
 	SendEventJson(std::move(Event));
 }
 
-void USentryManager::SendLogEntry(ESentryLevel Level, const FString Message, TArray<FString>&& Params)
+void FSentryManager::SendLogEntry(ESentryLevel Level, const FString Message, TArray<FString>&& Params)
 {
 	SendLogEntry(Level, {Message, std::move(Params)});
 }
 
-void USentryManager::SendLogEntry(ESentryLevel Level, const FSentryLogEntry& Value)
+void FSentryManager::SendLogEntry(ESentryLevel Level, const FSentryLogEntry& Value)
 {
 	FSentryEvent_Json Event = FSentryEvent_Json()
 								  .SetApplicationInfo(AppInfo)
@@ -59,19 +57,19 @@ void USentryManager::SendLogEntry(ESentryLevel Level, const FSentryLogEntry& Val
 	SendEventJson(std::move(Event));
 }
 
-void USentryManager::SendEventJson(const FSentryEvent_Json& Value)
+void FSentryManager::SendEventJson(const FSentryEvent_Json& Value)
 {
 	SendJson(Value.ToJson());
 }
 
-void USentryManager::SendEventJson(FSentryEvent_Json&& Value)
+void FSentryManager::SendEventJson(FSentryEvent_Json&& Value)
 {
 	SendJson(Value.ToJson());
 }
 
-void USentryManager::SendJson(FString&& Json)
+void FSentryManager::SendJson(FString&& Json)
 {
-	if(!Url.IsEmpty() && !Key.IsEmpty())
+	if(Url.IsEmpty() || Key.IsEmpty())
 	{
 		UE_LOG(LogSentryManager, Error, TEXT("Cannot send, DNS not properly configured."))
 		return;
@@ -87,11 +85,11 @@ void USentryManager::SendJson(FString&& Json)
 	Request->SetHeader("X-Sentry-Auth", Auth);
 	Request->SetContentAsString(Json);
 
-	Request->OnProcessRequestComplete().BindUObject(this, &USentryManager::OnProcessRequestComplete);
+	Request->OnProcessRequestComplete().BindRaw(this, &FSentryManager::OnProcessRequestComplete);
 	Request->ProcessRequest();
 }
 
-bool USentryManager::LoadDNS(const FString& DNS, bool Reset)
+bool FSentryManager::LoadDSN(const FString& DSN, bool Reset)
 {
 	if(Reset)
 	{
@@ -107,15 +105,15 @@ bool USentryManager::LoadDNS(const FString& DNS, bool Reset)
 
 	int32 SlashIndex = INDEX_NONE;
 	int32 AtIndex = INDEX_NONE;
-	const bool IsValidDNS = DNS.Len() > 32 && DNS.FindLastChar('/', SlashIndex) && SlashIndex > KeyEnd &&
-							DNS.FindLastChar('@', AtIndex) && AtIndex - KeyLen >= KeyBegin;
+	const bool IsValidDNS = DSN.Len() > 32 && DSN.FindLastChar('/', SlashIndex) && SlashIndex > KeyEnd &&
+							DSN.FindLastChar('@', AtIndex) && AtIndex - KeyLen >= KeyBegin;
 
 	if(IsValidDNS)
 	{
-		Key.Append(&DNS[KeyBegin], KeyLen);
+		Key = FString(KeyLen, &DSN[KeyBegin]);
 
-		const FString Domain = FString(SlashIndex - (KeyEnd + 1), &DNS[KeyEnd + 1]);
-		const FString Project = FString(&DNS[SlashIndex], DNS.Len() - SlashIndex);
+		const FString Domain = FString(SlashIndex - (KeyEnd + 1), &DSN[KeyEnd + 1]);
+		const FString Project = FString(&DSN[SlashIndex], DSN.Len() - SlashIndex);
 		Url = TEXT("https://") + Domain + TEXT("/api") + Project + TEXT("/store/");
 
 		UE_LOG(LogSentryManager, Display, TEXT("DNS load - ok"));
@@ -128,6 +126,6 @@ bool USentryManager::LoadDNS(const FString& DNS, bool Reset)
 	return IsValidDNS;
 }
 
-void USentryManager::OnProcessRequestComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+void FSentryManager::OnProcessRequestComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 }

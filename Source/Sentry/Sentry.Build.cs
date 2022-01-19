@@ -11,7 +11,8 @@ public class Sentry : ModuleRules
         PublicDependencyModuleNames.AddRange(
             new string[]
             {
-                "Core"
+                "Core",
+                "HTTP"
             }
             );
 
@@ -19,7 +20,6 @@ public class Sentry : ModuleRules
             new string[]
             {
                 "CoreUObject",
-                "HTTP",
                 "Json",
                 "JsonUtilities"
             }

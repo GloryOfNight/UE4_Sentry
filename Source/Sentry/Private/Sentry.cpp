@@ -6,11 +6,6 @@
 
 void FSentryModule::StartupModule()
 {
-	if(!Manager)
-	{
-		Manager = NewObject<USentryManager>();
-	}
-
 #if WITH_EDITOR
 #include <ISettingsModule.h>
 	ISettingsModule* SettingsModule = FModuleManager::GetModulePtr<ISettingsModule>("Settings");
@@ -27,17 +22,16 @@ void FSentryModule::StartupModule()
 
 void FSentryModule::ShutdownModule()
 {
-	// Manager var will be deleted by unreal cleaning of unreachable objects on exit
 }
 
-USentryManager* FSentryModule::GetManager()
+FSentryManager* FSentryModule::GetManager()
 {
 	static FSentryModule* Module = nullptr;
 	if(!Module)
 	{
 		Module = FModuleManager::GetModulePtr<FSentryModule>(TEXT("Sentry"));
 	}
-	return Module ? Module->Manager : nullptr;
+	return Module ? &Module->Manager : nullptr;
 }
 
 #undef LOCTEXT_NAMESPACE

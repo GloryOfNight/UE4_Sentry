@@ -17,8 +17,8 @@ public:
 	/** IModuleInterface implementation end */
 	
 	/** @return pointer to SentryManager or nullptr if module not created correctly */
-	SENTRY_API static USentryManager* GetManager();
+	SENTRY_API static FSentryManager* GetManager();
 
 private:
-	USentryManager* Manager = nullptr;
+	FSentryManager Manager = FSentryManager();
 };

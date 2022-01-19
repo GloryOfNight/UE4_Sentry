@@ -32,8 +32,8 @@ FSentryEvent_LogEntry_Json::FSentryEvent_LogEntry_Json(FSentryLogEntry&& Value)
 
 FSentryEvent_Json::FSentryEvent_Json()
 	: event_id{FGuid::NewGuid().ToString(EGuidFormats::Digits).ToLower()}
-	, timestamp{FDateTime::UtcNow().ToUnixTimestamp()}
 	, platform(TEXT("other"))
+	, timestamp{FDateTime::UtcNow().ToUnixTimestamp()}
 {
 }
 

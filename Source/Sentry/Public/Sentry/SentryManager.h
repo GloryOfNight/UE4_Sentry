@@ -9,19 +9,15 @@
 #include "Json/SentryJson.h"
 #include "Types/ApplicationInfo.h"
 
-#include "SentryManager.generated.h"
-
 DECLARE_LOG_CATEGORY_EXTERN(LogSentryManager, Display, All);
 
-UCLASS()
-class SENTRY_API USentryManager : public UObject
+class SENTRY_API FSentryManager
 {
-	GENERATED_BODY()
 public:
-	USentryManager();
+	FSentryManager();
 
 public:
-	static USentryManager* Get();
+	static FSentryManager* Get();
 
 	FSentryApplicationInfo& ApplicationInfo();
 
@@ -36,12 +32,12 @@ public:
 
 	void SendJson(FString&& Json);
 
-	bool LoadDNS(const FString& DNS, bool Reset);
+	bool LoadDSN(const FString& DNS, bool Reset);
 
 protected:
 	void OnProcessRequestComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
 private:
-	FString Url{};
-	FString Key{};
+	FString Url;
+	FString Key;
 };

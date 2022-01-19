@@ -14,9 +14,9 @@ public:
 public:
 	/** DNS of Sentry project */
 	UPROPERTY(Config, EditAnywhere, Category = "Sentry")
-	FString DNS;
+	FString DSN;
 
-#if WITH_EDITOR
+#if WITH_EDITOR	
 	void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 };
