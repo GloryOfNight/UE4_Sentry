@@ -10,13 +10,13 @@ struct SENTRY_API FSentryException
 	GENERATED_BODY()
 
 	UPROPERTY()
-	FString Type{};
+	FString Type;
 
 	UPROPERTY()
-	FString Value{};
+	FString Value;
 
 	UPROPERTY()
-	FString Module{};
+	FString Module;
 
 	UPROPERTY()
 	FString ThreadId;

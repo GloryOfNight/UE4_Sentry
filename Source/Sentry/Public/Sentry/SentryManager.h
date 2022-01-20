@@ -21,11 +21,11 @@ public:
 
 	FSentryApplicationInfo& ApplicationInfo();
 
-	void SendException(ESentryLevel Level, const FSentryException& Value);
+	void SendException(ESentryLevel::Type Level, const FSentryException& Value);
 
-	void SendLogEntry(ESentryLevel Level, const FString Message, TArray<FString>&& Params);
+	void SendLogEntry(ESentryLevel::Type Level, const FString Message, TArray<FString>&& Params);
 
-	void SendLogEntry(ESentryLevel Level, const FSentryLogEntry& Value);
+	void SendLogEntry(ESentryLevel::Type Level, const FSentryLogEntry& Value);
 
 	void SendEventJson(const FSentryEvent_Json& Value);
 	void SendEventJson(FSentryEvent_Json&& Value);

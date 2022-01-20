@@ -34,7 +34,7 @@ FSentryApplicationInfo& FSentryManager::ApplicationInfo()
 	return AppInfo;
 }
 
-void FSentryManager::SendException(ESentryLevel Level, const FSentryException& Value)
+void FSentryManager::SendException(ESentryLevel::Type Level, const FSentryException& Value)
 {
 	FSentryEvent_Json Event = FSentryEvent_Json()
 								  .SetApplicationInfo(AppInfo)
@@ -43,12 +43,12 @@ void FSentryManager::SendException(ESentryLevel Level, const FSentryException& V
 	SendEventJson(std::move(Event));
 }
 
-void FSentryManager::SendLogEntry(ESentryLevel Level, const FString Message, TArray<FString>&& Params)
+void FSentryManager::SendLogEntry(ESentryLevel::Type Level, const FString Message, TArray<FString>&& Params)
 {
 	SendLogEntry(Level, {Message, std::move(Params)});
 }
 
-void FSentryManager::SendLogEntry(ESentryLevel Level, const FSentryLogEntry& Value)
+void FSentryManager::SendLogEntry(ESentryLevel::Type Level, const FSentryLogEntry& Value)
 {
 	FSentryEvent_Json Event = FSentryEvent_Json()
 								  .SetApplicationInfo(AppInfo)
@@ -71,7 +71,7 @@ void FSentryManager::SendJson(FString&& Json)
 {
 	if(Url.IsEmpty() || Key.IsEmpty())
 	{
-		UE_LOG(LogSentryManager, Error, TEXT("Cannot send, DNS not properly configured."))
+		UE_LOG(LogSentryManager, Error, TEXT("Cannot send, DSN not properly configured."))
 		return;
 	}
 	FHttpModule* HttpModule = &FHttpModule::Get();

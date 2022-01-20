@@ -99,7 +99,7 @@ public:
 	FSentryEvent_Json& SetLogEntry(const FSentryLogEntry& Value);
 	FSentryEvent_Json& SetLogEntry(FSentryLogEntry&& Value);
 
-	FSentryEvent_Json& SetLevel(const ESentryLevel& Value);
+	FSentryEvent_Json& SetLevel(const ESentryLevel::Type& Value);
 
 	FSentryEvent_Json& SetApplicationInfo(const FSentryApplicationInfo& Value);
 };

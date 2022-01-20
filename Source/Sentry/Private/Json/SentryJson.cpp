@@ -80,27 +80,9 @@ FSentryEvent_Json& FSentryEvent_Json::SetLogEntry(FSentryLogEntry&& Value)
 	return *this;
 }
 
-FSentryEvent_Json& FSentryEvent_Json::SetLevel(const ESentryLevel& Value)
+FSentryEvent_Json& FSentryEvent_Json::SetLevel(const ESentryLevel::Type& Value)
 {
-	switch(Value)
-	{
-	case ESentryLevel::Debug:
-		level = TEXT("debug");
-		break;
-	case ESentryLevel::Error:
-		level = TEXT("error");
-		break;
-	case ESentryLevel::Fatal:
-		level = TEXT("fatal");
-		break;
-	case ESentryLevel::Info:
-		level = TEXT("info");
-		break;
-	case ESentryLevel::Warning:
-		level = TEXT("warning");
-		break;
-	default:;
-	}
+	level = ESentryLevel::ToString(Value);
 	return *this;
 }
 

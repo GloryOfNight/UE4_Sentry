@@ -9,8 +9,8 @@ struct SENTRY_API FSentryLogEntry
 	GENERATED_BODY()
 
 	UPROPERTY()
-	FString Message{};
+	FString Message;
 
 	UPROPERTY()
-	TArray<FString> Params{};
+	TArray<FString> Params;
 };

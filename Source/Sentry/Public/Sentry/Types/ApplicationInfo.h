@@ -9,16 +9,16 @@ struct SENTRY_API FSentryApplicationInfo
 	GENERATED_BODY()
 
 	UPROPERTY()
-	FString Distribution{};
+	FString Distribution;
 
 	UPROPERTY()
-	FString Environment{};
+	FString Environment;
 
 	UPROPERTY()
-	FString Release{};
+	FString Release;
 
 	UPROPERTY()
-	FString ServerName{};
+	FString ServerName;
 
 	FSentryApplicationInfo& SetDistribution(const FString& Value);
 	FSentryApplicationInfo& SetDistribution(FString&& Value);
