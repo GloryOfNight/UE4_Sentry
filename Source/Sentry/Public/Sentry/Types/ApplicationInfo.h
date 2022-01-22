@@ -20,6 +20,9 @@ struct SENTRY_API FSentryApplicationInfo
 	UPROPERTY()
 	FString ServerName;
 
+	UPROPERTY()
+	TMap<FString, FString> Tags;
+
 	FSentryApplicationInfo& SetDistribution(const FString& Value);
 	FSentryApplicationInfo& SetDistribution(FString&& Value);
 
@@ -31,4 +34,9 @@ struct SENTRY_API FSentryApplicationInfo
 
 	FSentryApplicationInfo& SetServerName(const FString& Value);
 	FSentryApplicationInfo& SetServerName(FString&& Value);
+
+	FSentryApplicationInfo& SetTags(const TMap<FString, FString>& Value);
+	FSentryApplicationInfo& SetTags(TMap<FString, FString>&& Value);
+
+	FSentryApplicationInfo& AddTag(const FString& Key, const FString& Value = {});
 };

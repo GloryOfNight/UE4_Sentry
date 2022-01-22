@@ -87,6 +87,9 @@ struct FSentryEvent_Json
 	FString server_name;
 
 	UPROPERTY()
+	TMap<FString, FString> tags;
+
+	UPROPERTY()
 	int64 timestamp;
 
 public:

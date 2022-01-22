@@ -92,5 +92,6 @@ FSentryEvent_Json& FSentryEvent_Json::SetApplicationInfo(const FSentryApplicatio
 	environment = Value.Environment;
 	release = Value.Release;
 	server_name = Value.ServerName;
+	tags = Value.Tags;
 	return *this;
 }

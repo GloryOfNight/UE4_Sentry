@@ -47,3 +47,21 @@ FSentryApplicationInfo& FSentryApplicationInfo::SetServerName(FString&& Value)
 	ServerName = std::move(Value);
 	return *this;
 }
+
+FSentryApplicationInfo& FSentryApplicationInfo::SetTags(const TMap<FString, FString>& Value)
+{
+	Tags = Value;
+	return *this;
+}
+
+FSentryApplicationInfo& FSentryApplicationInfo::SetTags(TMap<FString, FString>&& Value)
+{
+	Tags = std::move(Value);
+	return *this;
+}
+
+FSentryApplicationInfo& FSentryApplicationInfo::AddTag(const FString& Key, const FString& Value)
+{
+	Tags.Add(Key, Value);
+	return *this;
+}
