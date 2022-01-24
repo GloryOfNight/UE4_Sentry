@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "Sentry/Sentry.h"
+#include "Sentry.h"
 
 #define LOCTEXT_NAMESPACE "FSentryModule"
 

@@ -60,6 +60,18 @@ FSentryApplicationInfo& FSentryApplicationInfo::SetTags(TMap<FString, FString>&&
 	return *this;
 }
 
+FSentryApplicationInfo& FSentryApplicationInfo::AddTags(const TMap<FString, FString>& Value)
+{
+	Tags.Append(Value);
+	return *this;
+}
+
+FSentryApplicationInfo& FSentryApplicationInfo::AddTags(TMap<FString, FString>&& Value)
+{
+	Tags.Append(std::move(Value));
+	return *this;
+}
+
 FSentryApplicationInfo& FSentryApplicationInfo::AddTag(const FString& Key, const FString& Value)
 {
 	Tags.Add(Key, Value);

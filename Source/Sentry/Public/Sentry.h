@@ -5,8 +5,8 @@
 #include <CoreMinimal.h>
 #include <Modules/ModuleManager.h>
 
-#include "SentryManager.h"
-#include "SentrySettings.h"
+#include "Sentry/SentryManager.h"
+#include "Sentry/SentrySettings.h"
 
 class FSentryModule : public IModuleInterface
 {

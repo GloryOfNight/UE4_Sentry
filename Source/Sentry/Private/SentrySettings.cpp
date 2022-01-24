@@ -16,6 +16,6 @@ void USentrySettings::PostEditChangeProperty(FPropertyChangedEvent& PropertyChan
 		{
 			Manager->LoadDSN(DSN, true);
 		}
-	}	
+	}
 }
 #endif

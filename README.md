@@ -1,7 +1,7 @@
 # Unreal Engine 4 - Sentry
 Unreal Engine 4 integration of [Sentry](https://sentry.io/) monitoring
 
-Plugin utilizes Sentry HTTP API to send Events data directly to your DSN.
+Plugin utilizes Sentry HTTP API to send Events data to your DSN.
 
 Plugin was build and tested on 4.27.* version of engine.
 Generaly it should work fine with most of engine versions and all platforms, since its utilizes HTTP and Json modules that well supported and do not change much.

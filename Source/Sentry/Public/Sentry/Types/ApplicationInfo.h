@@ -38,5 +38,7 @@ struct SENTRY_API FSentryApplicationInfo
 	FSentryApplicationInfo& SetTags(const TMap<FString, FString>& Value);
 	FSentryApplicationInfo& SetTags(TMap<FString, FString>&& Value);
 
+	FSentryApplicationInfo& AddTags(const TMap<FString, FString>& Value);
+	FSentryApplicationInfo& AddTags(TMap<FString, FString>&& Value);
 	FSentryApplicationInfo& AddTag(const FString& Key, const FString& Value = {});
 };

@@ -3,7 +3,7 @@
 #include <Containers/UnrealString.h>
 #include <Http.h>
 
-#include "Sentry/Sentry.h"
+#include "Sentry.h"
 
 DEFINE_LOG_CATEGORY(LogSentryManager);
 
@@ -13,14 +13,14 @@ FSentryManager::FSentryManager()
 	: Url{}
 	, Key{}
 {
-	const FString& DNS = USentrySettings::Get()->DSN;
-	if(!DNS.IsEmpty())
+	const FString& DSN = USentrySettings::Get()->DSN;
+	if(!DSN.IsEmpty())
 	{
-		LoadDSN(DNS, false);
+		LoadDSN(DSN, false);
 	}
 	else
 	{
-		UE_LOG(LogSentryManager, Display, TEXT("No DNS provided, service will not work"));
+		UE_LOG(LogSentryManager, Display, TEXT("No DSN provided. Sentry will not work untill you setup DSN"));
 	}
 }
 
@@ -43,7 +43,7 @@ void FSentryManager::SendException(ESentryLevel::Type Level, const FSentryExcept
 	SendEventJson(std::move(Event));
 }
 
-void FSentryManager::SendLogEntry(ESentryLevel::Type Level, const FString Message, TArray<FString>&& Params)
+void FSentryManager::SendLogEntry(ESentryLevel::Type Level, const FString& Message, TArray<FString>&& Params)
 {
 	SendLogEntry(Level, {Message, std::move(Params)});
 }
@@ -74,19 +74,31 @@ void FSentryManager::SendJson(FString&& Json)
 		UE_LOG(LogSentryManager, Error, TEXT("Cannot send, DSN not properly configured."))
 		return;
 	}
-	FHttpModule* HttpModule = &FHttpModule::Get();
-	FHttpRequestRef Request = HttpModule->CreateRequest();
-	Request->SetURL(Url);
-	Request->SetVerb("POST");
-	Request->SetHeader("Content-Type", "application/json");
-	Request->SetHeader("Accept", "application/json");
 
-	const FString Auth = FString::Printf(TEXT("Sentry sentry_version=7, sentry_timestamp=%lld, sentry_key=%s"), FDateTime::UtcNow().ToUnixTimestamp(), *Key);
-	Request->SetHeader("X-Sentry-Auth", Auth);
-	Request->SetContentAsString(Json);
+	const auto Settings = USentrySettings::Get();
+#if WITH_EDITOR
+	if(!Settings->EnableInEditor)
+	{
+		return;
+	}
+#endif
 
-	Request->OnProcessRequestComplete().BindRaw(this, &FSentryManager::OnProcessRequestComplete);
-	Request->ProcessRequest();
+	if(Settings->Enable)
+	{
+		FHttpModule* HttpModule = &FHttpModule::Get();
+		FHttpRequestRef Request = HttpModule->CreateRequest();
+		Request->SetURL(Url);
+		Request->SetVerb("POST");
+		Request->SetHeader("Content-Type", "application/json");
+		Request->SetHeader("Accept", "application/json");
+
+		const FString Auth = FString::Printf(TEXT("Sentry sentry_version=7, sentry_timestamp=%lld, sentry_key=%s"), FDateTime::UtcNow().ToUnixTimestamp(), *Key);
+		Request->SetHeader("X-Sentry-Auth", Auth);
+		Request->SetContentAsString(Json);
+
+		Request->OnProcessRequestComplete().BindRaw(this, &FSentryManager::OnProcessRequestComplete);
+		Request->ProcessRequest();
+	}
 }
 
 bool FSentryManager::LoadDSN(const FString& DSN, bool Reset)
@@ -105,10 +117,10 @@ bool FSentryManager::LoadDSN(const FString& DSN, bool Reset)
 
 	int32 SlashIndex = INDEX_NONE;
 	int32 AtIndex = INDEX_NONE;
-	const bool IsValidDNS = DSN.Len() > 32 && DSN.FindLastChar('/', SlashIndex) && SlashIndex > KeyEnd &&
+	const bool IsValidDSN = DSN.Len() > 32 && DSN.FindLastChar('/', SlashIndex) && SlashIndex > KeyEnd &&
 							DSN.FindLastChar('@', AtIndex) && AtIndex - KeyLen >= KeyBegin;
 
-	if(IsValidDNS)
+	if(IsValidDSN)
 	{
 		Key = FString(KeyLen, &DSN[KeyBegin]);
 
@@ -116,16 +128,17 @@ bool FSentryManager::LoadDSN(const FString& DSN, bool Reset)
 		const FString Project = FString(&DSN[SlashIndex], DSN.Len() - SlashIndex);
 		Url = TEXT("https://") + Domain + TEXT("/api") + Project + TEXT("/store/");
 
-		UE_LOG(LogSentryManager, Display, TEXT("DNS load - ok"));
+		UE_LOG(LogSentryManager, Display, TEXT("DSN load - ok"));
 	}
 	else
 	{
-		UE_LOG(LogSentryManager, Error, TEXT("DNS load - failed"));
+		UE_LOG(LogSentryManager, Error, TEXT("DSN load - failed"));
 	}
 
-	return IsValidDNS;
+	return IsValidDSN;
 }
 
 void FSentryManager::OnProcessRequestComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
+	// TODO: retries
 }

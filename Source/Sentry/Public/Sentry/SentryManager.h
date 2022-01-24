@@ -21,18 +21,18 @@ public:
 
 	FSentryApplicationInfo& ApplicationInfo();
 
-	void SendException(ESentryLevel::Type Level, const FSentryException& Value);
+	void SendException(const ESentryLevel::Type Level, const FSentryException& Value);
 
-	void SendLogEntry(ESentryLevel::Type Level, const FString Message, TArray<FString>&& Params);
+	void SendLogEntry(const ESentryLevel::Type Level, const FString& Message, TArray<FString>&& Params);
 
-	void SendLogEntry(ESentryLevel::Type Level, const FSentryLogEntry& Value);
+	void SendLogEntry(const ESentryLevel::Type Level, const FSentryLogEntry& Value);
 
 	void SendEventJson(const FSentryEvent_Json& Value);
 	void SendEventJson(FSentryEvent_Json&& Value);
 
 	void SendJson(FString&& Json);
 
-	bool LoadDSN(const FString& DNS, bool Reset);
+	bool LoadDSN(const FString& DSN, const bool Reset);
 
 protected:
 	void OnProcessRequestComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);

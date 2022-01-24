@@ -13,11 +13,11 @@ namespace ESentryLevel
 		Info,
 		Warning
 	};
-}
+} // namespace ESentryLevel
 
 namespace ESentryLevel
 {
-	static TCHAR* ToString(ESentryLevel::Type Value) 
+	static TCHAR* ToString(const ESentryLevel::Type Value)
 	{
 		switch(Value)
 		{
@@ -34,4 +34,4 @@ namespace ESentryLevel
 		}
 		return TEXT("unhandled enum case");
 	}
-}
+} // namespace ESentryLevel
