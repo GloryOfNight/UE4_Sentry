@@ -1,4 +1,7 @@
 #pragma once
+#include "Containers/UnrealString.h"
+
+#include "SentryMacroUtils.hxx"
 
 #include "LogEntry.generated.h"
 
@@ -13,4 +16,7 @@ struct SENTRY_API FSentryLogEntry
 
 	UPROPERTY()
 	TArray<FString> Params;
+
+	SENTRY_SETTER(FSentryLogEntry, FString, Message);
+	SENTRY_SETTER(FSentryLogEntry, TArray<FString>, Params);
 };

@@ -16,10 +16,10 @@ public:
 	UPROPERTY(Config, EditAnywhere, Category = "Sentry")
 	bool Enable = true;
 
-#if WITH_EDITOR
-	/** Enable Sentry sending events in editor, turn it off if you don't send events from editor */
+#if WITH_EDITORONLY_DATA
+	/** Disable Sentry ability to send events in editor */
 	UPROPERTY(Config, EditAnywhere, Category = "Sentry")
-	bool EnableInEditor = true;
+	bool DisableInEditor = false;
 #endif
 
 	/** DSN of Sentry project */

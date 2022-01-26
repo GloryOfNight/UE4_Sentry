@@ -77,7 +77,7 @@ void FSentryManager::SendJson(FString&& Json)
 
 	const auto Settings = USentrySettings::Get();
 #if WITH_EDITOR
-	if(!Settings->EnableInEditor)
+	if(Settings->DisableInEditor)
 	{
 		return;
 	}
@@ -97,7 +97,15 @@ void FSentryManager::SendJson(FString&& Json)
 		Request->SetContentAsString(Json);
 
 		Request->OnProcessRequestComplete().BindRaw(this, &FSentryManager::OnProcessRequestComplete);
-		Request->ProcessRequest();
+		const bool Res = Request->ProcessRequest();
+		if(Res)
+		{
+			UE_LOG(LogSentryManager, Verbose, TEXT("Sentry start processing http request - ok"))
+		}
+		else
+		{
+			UE_LOG(LogSentryManager, Error, TEXT("Sentry couldn't process http request"))
+		}
 	}
 }
 
@@ -140,5 +148,18 @@ bool FSentryManager::LoadDSN(const FString& DSN, bool Reset)
 
 void FSentryManager::OnProcessRequestComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
+	if(bConnectedSuccessfully && Response->GetResponseCode() == EHttpResponseCodes::Ok)
+	{
+		UE_LOG(LogSentryManager, Verbose, TEXT("Sentry process request complete - ok"))
+	}
+	else
+	{
+		int32 ResponseCode{-1};
+		if(Response) // not all platforms return valid Ptr to response when failed to process.
+		{
+			ResponseCode = Response->GetResponseCode();
+		}
+		UE_LOG(LogSentryManager, Error, TEXT("Sentry process request failed with: Response code: %i"), ResponseCode);
+	}
 	// TODO: retries
 }

@@ -2,6 +2,45 @@
 
 #include <JsonObjectConverter.h>
 
+FSentryGeo_Json::FSentryGeo_Json(const FSentryUserGeoInfo& Value)
+	: city{Value.City}
+	, country_code{Value.CountryCode}
+	, region{Value.Region}
+{
+}
+
+FSentryGeo_Json::FSentryGeo_Json(FSentryUserGeoInfo&& Value)
+	: city{std::move(Value.City)}
+	, country_code{std::move(Value.CountryCode)}
+	, region{std::move(Value.Region)}
+{
+}
+
+FSentryUser_Json::FSentryUser_Json(const FSentryUserInfo& Value)
+	: data{Value.Data}
+	, email{Value.Email}
+	, geo{FSentryGeo_Json(Value.Geo)}
+	, id{Value.Id}
+	, ip_address{Value.IpAddress}
+	, name{Value.Name}
+	, segment{Value.Segment}
+	, username{Value.Username}
+
+{
+}
+
+FSentryUser_Json::FSentryUser_Json(FSentryUserInfo&& Value)
+	: data{std::move(Value.Data)}
+	, email{std::move(Value.Email)}
+	, geo{FSentryGeo_Json(std::move(Value.Geo))}
+	, id{std::move(Value.Id)}
+	, ip_address{std::move(Value.IpAddress)}
+	, name{std::move(Value.Name)}
+	, segment{std::move(Value.Segment)}
+	, username{std::move(Value.Username)}
+{
+}
+
 FSentryEvent_Exception_Json::FSentryEvent_Exception_Json(const FSentryException& Value)
 	: module{Value.Module}
 	, thread_id{Value.ThreadId}
@@ -93,5 +132,6 @@ FSentryEvent_Json& FSentryEvent_Json::SetApplicationInfo(const FSentryApplicatio
 	release = Value.Release;
 	server_name = Value.ServerName;
 	tags = Value.Tags;
+	user = Value.User;
 	return *this;
 }

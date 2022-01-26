@@ -1,7 +1,69 @@
 #pragma once
 #include <Containers/UnrealString.h>
 
+#include "SentryMacroUtils.hxx"
+
 #include "ApplicationInfo.generated.h"
+
+// https://develop.sentry.dev/sdk/event-payloads/types/#geo
+USTRUCT()
+struct SENTRY_API FSentryUserGeoInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString Region;
+
+	UPROPERTY()
+	FString CountryCode;
+
+	UPROPERTY()
+	FString City;
+
+	SENTRY_SETTER(FSentryUserGeoInfo, FString, Region);
+	SENTRY_SETTER(FSentryUserGeoInfo, FString, CountryCode);
+	SENTRY_SETTER(FSentryUserGeoInfo, FString, City);
+};
+
+// https://develop.sentry.dev/sdk/event-payloads/types/#user
+USTRUCT()
+struct SENTRY_API FSentryUserInfo
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FString Username;
+
+	UPROPERTY()
+	FString Segment;
+
+	UPROPERTY()
+	FString Name;
+
+	UPROPERTY()
+	FString IpAddress;
+
+	UPROPERTY()
+	FString Id;
+
+	UPROPERTY()
+	FSentryUserGeoInfo Geo;
+
+	UPROPERTY()
+	FString Email;
+
+	UPROPERTY()
+	TMap<FString, FString> Data;
+
+	SENTRY_SETTER(FSentryUserInfo, FString, Username);
+	SENTRY_SETTER(FSentryUserInfo, FString, Segment);
+	SENTRY_SETTER(FSentryUserInfo, FString, Name);
+	SENTRY_SETTER(FSentryUserInfo, FString, IpAddress);
+	SENTRY_SETTER(FSentryUserInfo, FString, Id);
+	SENTRY_SETTER(FSentryUserInfo, FSentryUserGeoInfo, Geo);
+	SENTRY_SETTER(FSentryUserInfo, FString, Email);
+	SENTRY_SETTER_MAP(FSentryUserInfo, FString, FString, Data);
+};
 
 USTRUCT()
 struct SENTRY_API FSentryApplicationInfo
@@ -21,24 +83,15 @@ struct SENTRY_API FSentryApplicationInfo
 	FString ServerName;
 
 	UPROPERTY()
+	FSentryUserInfo User;
+
+	UPROPERTY()
 	TMap<FString, FString> Tags;
 
-	FSentryApplicationInfo& SetDistribution(const FString& Value);
-	FSentryApplicationInfo& SetDistribution(FString&& Value);
-
-	FSentryApplicationInfo& SetEnvironment(const FString& Value);
-	FSentryApplicationInfo& SetEnvironment(FString&& Value);
-
-	FSentryApplicationInfo& SetRelease(const FString& Value);
-	FSentryApplicationInfo& SetRelease(FString&& Value);
-
-	FSentryApplicationInfo& SetServerName(const FString& Value);
-	FSentryApplicationInfo& SetServerName(FString&& Value);
-
-	FSentryApplicationInfo& SetTags(const TMap<FString, FString>& Value);
-	FSentryApplicationInfo& SetTags(TMap<FString, FString>&& Value);
-
-	FSentryApplicationInfo& AddTags(const TMap<FString, FString>& Value);
-	FSentryApplicationInfo& AddTags(TMap<FString, FString>&& Value);
-	FSentryApplicationInfo& AddTag(const FString& Key, const FString& Value = {});
+	SENTRY_SETTER(FSentryApplicationInfo, FString, Distribution);
+	SENTRY_SETTER(FSentryApplicationInfo, FString, Environment);
+	SENTRY_SETTER(FSentryApplicationInfo, FString, Release);
+	SENTRY_SETTER(FSentryApplicationInfo, FString, ServerName);
+	SENTRY_SETTER(FSentryApplicationInfo, FSentryUserInfo, User);
+	SENTRY_SETTER_MAP(FSentryApplicationInfo, FString, FString, Tags);
 };
