@@ -16,13 +16,17 @@ Generaly it should work fine with most of engine versions and all platforms, sin
 * [ ] Breadcrumbs [more info](https://develop.sentry.dev/sdk/event-payloads/types/#typedef-Breadcrumbs)
 * [ ] Partial or full BP support 
 
-## Support
+## Contribution
+Feel free to submit your own work via Pull Requests. If you encounter problems or have questions, please use Issues or Discussions section of this repo.
+
+## References
 Checkout [wiki](https://github.com/GloryOfNight/UE4_Sentry/wiki) section for documentation and API examples. 
 
-If you found this plugin useful, please consider givind it a star (stars, yay!). 
+* [Sentry API](https://develop.sentry.dev/api/)
+* [Sentry Event Payloads](https://develop.sentry.dev/sdk/event-payloads/)
 
-If you encounter problems or have questions, please use Issues or Discussions section of this repo.
 
-Feel free to submit your own work via Pull Requests.
+## Support
+If you found this plugin useful, please consider givind it a star (stars, yay!).
 
 Have a nice day!
