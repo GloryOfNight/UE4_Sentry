@@ -1,4 +1,6 @@
 # Unreal Engine 4 - Sentry
+No longer supported, consider using: [sentry-unreal](https://github.com/getsentry/sentry-unreal)
+
 Unreal Engine 4 integration of [Sentry](https://sentry.io/) monitoring
 
 Plugin utilizes Sentry HTTP API to send Events data to your DSN.
